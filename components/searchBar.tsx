@@ -1,10 +1,8 @@
-import { icons } from '@/constants/icons'
-import { View, Text, Image, TextInput } from 'react-native'
+//react-native
+import { Image, TextInput, View } from 'react-native'
 
-type SearchBarProps = {
-  placeholder: string,
-  onPress?: () => void
-}
+//custom icons
+import { icons } from '@/constants/icons'
 
 export default function SearchBar({ placeholder, onPress }: SearchBarProps) {
   return (

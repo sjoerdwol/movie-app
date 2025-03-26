@@ -16,7 +16,6 @@ import { images } from "@/constants/images";
 
 export default function Index() {
   const router = useRouter();
-
   const { data: movies, loading: moviesLoading, error: moviesError } = useFetch(() => fetchMovies({ query: '' }));
 
   return (
@@ -42,7 +41,8 @@ export default function Index() {
           <View>
             <Image
               source={icons.logo}
-              className="w-12 h-10 mt-20 mb-5 mx-auto" />
+              className="w-12 h-10 mt-20 mb-5 mx-auto"
+            />
             <View className="flex-1 mt-5 ">
               <SearchBar
                 onPress={() => router.push("/search")}
@@ -53,11 +53,7 @@ export default function Index() {
                 <FlatList
                   data={movies}
                   keyExtractor={(item) => item.id}
-                  renderItem={({ item }) => (
-                    <MovieCard
-                      {...item}
-                    />
-                  )}
+                  renderItem={({ item }) => <MovieCard {...item} />}
                   numColumns={3}
                   columnWrapperStyle={{
                     justifyContent: 'center',

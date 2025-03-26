@@ -1,6 +1,8 @@
 type SearchBarProps = {
   placeholder: string,
-  onPress?: () => void
+  onPress?: () => void,
+  value?: string,
+  onChangeText?: (string) => void
 }
 
 type TabIconProps = {

@@ -4,6 +4,7 @@ import { ActivityIndicator, FlatList, Image, Text, View } from 'react-native';
 
 //service calls
 import { fetchMovies } from "@/services/api";
+import { updateSearchCount } from '@/services/appwrite';
 import useFetch from "@/services/useFetch";
 
 //custom components, images etc.
@@ -11,7 +12,6 @@ import MovieCard from '@/components/movieCard'
 import SearchBar from '@/components/searchBar';
 import { icons } from '@/constants/icons';
 import { images } from '@/constants/images'
-
 
 export default function SearchPage() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -24,10 +24,16 @@ export default function SearchPage() {
       } else {
         reset();
       }
-    }, 500);
+    }, 1000);
 
     return () => clearTimeout(func);
   }, [searchQuery]);
+
+  useEffect(() => {
+    if (movies?.length > 0 && movies?.[0]) {
+      updateSearchCount(searchQuery, movies[0]);
+    }
+  }, [movies]);
 
   return (
     <View className='flex-1 bg-primary'>

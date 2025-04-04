@@ -4,6 +4,8 @@ import MaskedView from '@react-native-masked-view/masked-view';
 
 //expo
 import { Link } from 'expo-router'
+
+//custom images
 import { images } from '@/constants/images';
 
 export default function TrendingCard({ movie: { movie_id, title, poster_url }, index }: TrendingCardProps) {

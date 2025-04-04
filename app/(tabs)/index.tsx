@@ -6,16 +6,19 @@ import { useRouter } from "expo-router";
 
 //service calls
 import { fetchMovies } from "@/services/api";
+import { getTrendingMovies } from "@/services/appwrite";
 import useFetch from "@/services/useFetch";
 
 //custom components, images etc.
 import MovieCard from "@/components/movieCard";
 import SearchBar from "@/components/searchBar";
+import TrendingCard from "@/components/trendingCard";
 import { icons } from "@/constants/icons";
 import { images } from "@/constants/images";
 
 export default function Index() {
   const router = useRouter();
+  const { data: trending, loading: trendingLoading, error: trendingError } = useFetch(getTrendingMovies);
   const { data: movies, loading: moviesLoading, error: moviesError } = useFetch(() => fetchMovies({ query: '' }));
 
   return (
@@ -29,14 +32,14 @@ export default function Index() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ minHeight: '100%', paddingBottom: 10 }}
       >
-        {moviesLoading ? (
+        {moviesLoading || trendingLoading ? (
           <ActivityIndicator
             size="large"
             color='#0000ff'
             className="mt-10 self-center"
           />
-        ) : moviesError ? (
-          <Text>Error: {moviesError.message}</Text>
+        ) : moviesError || trendingError ? (
+          <Text>Error: {moviesError?.message || trendingError?.message}</Text>
         ) : (
           <View>
             <Image
@@ -48,6 +51,21 @@ export default function Index() {
                 onPress={() => router.push("/search")}
                 placeholder="Search for a movie"
               />
+
+              {trending && (
+                <>
+                  <Text className="text-lg text-white font-bold mt-5 mb-3">Trending Movies</Text>
+                  <FlatList
+                    data={trending}
+                    keyExtractor={(item) => item.movie_id.toString()}
+                    renderItem={({ item, index }) => <TrendingCard movie={item} index={index} />}
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    ItemSeparatorComponent={() => <View className="w-4" />}
+                  />
+                </>
+              )}
+
               <>
                 <Text className="text-lg text-white font-bold mt-5 mb-3">Latest Movies</Text>
                 <FlatList

@@ -20,7 +20,12 @@ export default function MovieCard({ id, poster_path, title, vote_average, releas
           className='w-full h-52 rounded-lg'
           resizeMode='cover'
         />
-        <Text className='text-sm font-bold text-white mt-2' numberOfLines={1}>{title}</Text>
+        <Text
+          className='text-sm font-bold text-white mt-2'
+          numberOfLines={1}
+        >
+          {title}
+        </Text>
         <View className='flex-row items-center justify-start gap-x-1'>
           <Image
             source={icons.star}

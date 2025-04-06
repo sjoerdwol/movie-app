@@ -2,7 +2,7 @@
 import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native'
 
 // expo
-import { useLocalSearchParams } from 'expo-router'
+import { router, useLocalSearchParams } from 'expo-router'
 
 //service calls
 import { fetchMovieDetails } from '@/services/api';
@@ -14,7 +14,7 @@ import MovieInfo from '@/components/movieInfo';
 
 export default function MovieDetails() {
   const { id } = useLocalSearchParams();
-  const { data: movie, loading } = useFetch(() => fetchMovieDetails(id as string));
+  const { data: movie } = useFetch(() => fetchMovieDetails(id as string));
 
   return (
     <View className='bg-primary flex-1'>
@@ -48,6 +48,17 @@ export default function MovieDetails() {
           </View>
           <MovieInfo label='Production Companies' value={movie?.production_companies.map((c) => c.name).join(' - ') || 'N/A'} />
         </View>
+        <TouchableOpacity
+          className='left-0 right-0 mx-5 mt-10 bg-accent rounded-lg py-3.5 flex flex-row items-center justify-center z-50'
+          onPress={router.back}
+        >
+          <Image
+            source={icons.arrow}
+            className='size-5 mr-1 mt-0.5 rotate-180'
+            tintColor="#fff"
+          />
+          <Text className='text-white font-semibold text-base'>Go back</Text>
+        </TouchableOpacity>
       </ScrollView>
     </View>
   )

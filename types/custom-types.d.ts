@@ -10,3 +10,8 @@ type TabIconProps = {
   icon: any,
   title: string
 }
+
+type MovieInfoProps = {
+  label: string,
+  value?: string | number | null
+}

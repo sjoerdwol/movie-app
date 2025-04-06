@@ -1,5 +1,4 @@
 //react-native
-import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "react-native";
 
 //expo

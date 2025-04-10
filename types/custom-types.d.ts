@@ -15,3 +15,16 @@ type MovieInfoProps = {
   label: string,
   value?: string | number | null
 }
+
+type MovieDetailButtonProps = {
+  onPress: () => void,
+  icon: any,
+  rotateIcon: boolean,
+  text: string
+}
+
+type WatchlistMovie = {
+  movieId: number,
+  title: string,
+  poster_url: string
+}

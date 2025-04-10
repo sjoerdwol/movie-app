@@ -1,20 +1,32 @@
 // react native
-import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import { Image, ScrollView, Text, View } from 'react-native'
 
 // expo
 import { router, useLocalSearchParams } from 'expo-router'
 
 //service calls
+import { addToWatchlist, checkIfMovieOnWatchlist, removeFromWatchlist } from '@/services/appwrite';
 import { fetchMovieDetails } from '@/services/api';
 import useFetch from "@/services/useFetch";
 
 //custom components, images etc.
 import { icons } from "@/constants/icons";
 import MovieInfo from '@/components/movieInfo';
+import MovieDetailButton from '@/components/movieDetailButton';
 
 export default function MovieDetails() {
   const { id } = useLocalSearchParams();
   const { data: movie } = useFetch(() => fetchMovieDetails(id as string));
+  const { data: isSaved, fetchData: refetchIsSaved } = useFetch(() => checkIfMovieOnWatchlist(id as string));
+
+  const toggleSave = async () => {
+    if (isSaved) {
+      await removeFromWatchlist(id as string);
+    } else {
+      await addToWatchlist(id as string, movie?.title as string, movie?.poster_path as string);
+    }
+    await refetchIsSaved();
+  }
 
   return (
     <View className='bg-primary flex-1'>
@@ -48,17 +60,20 @@ export default function MovieDetails() {
           </View>
           <MovieInfo label='Production Companies' value={movie?.production_companies.map((c) => c.name).join(' - ') || 'N/A'} />
         </View>
-        <TouchableOpacity
-          className='left-0 right-0 mx-5 mt-10 bg-accent rounded-lg py-3.5 flex flex-row items-center justify-center z-50'
-          onPress={router.back}
-        >
-          <Image
-            source={icons.arrow}
-            className='size-5 mr-1 mt-0.5 rotate-180'
-            tintColor="#fff"
+        <View className='flex flex-row justify-around'>
+          <MovieDetailButton
+            onPress={router.back}
+            icon={icons.arrow}
+            rotateIcon={true}
+            text='Go back'
           />
-          <Text className='text-white font-semibold text-base'>Go back</Text>
-        </TouchableOpacity>
+          <MovieDetailButton
+            onPress={() => { toggleSave() }}
+            icon={icons.save}
+            rotateIcon={false}
+            text={isSaved ? 'Remove' : 'Save'}
+          />
+        </View>
       </ScrollView>
     </View>
   )

@@ -2,6 +2,7 @@ import { Client, Databases, ID, Query } from 'react-native-appwrite';
 
 const COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_ID!;
 const DATABASE_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID!;
+const WATCHLIST_COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_WATCHLIST_COLLECTION_ID!;
 
 const client = new Client()
   .setEndpoint('https://cloud.appwrite.io/v1')
@@ -65,5 +66,96 @@ export const getTrendingMovies = async (): Promise<TrendingMovie[] | undefined> 
   } catch (e) {
     console.log(e);
     return undefined;
+  }
+}
+
+// adds a movie to the watchlist
+export const addToWatchlist = async (movie_id: string, title: string, poster_url: string) => {
+  try {
+    const result = await db.listDocuments(
+      DATABASE_ID,
+      WATCHLIST_COLLECTION_ID,
+      [Query.equal('movieId', parseInt(movie_id))]
+    );
+
+    // double checks that the movie is not yet on the wishlist
+    if (result.documents.length == 0) {
+      await db.createDocument(
+        DATABASE_ID,
+        WATCHLIST_COLLECTION_ID,
+        ID.unique(),
+        {
+          movieId: parseInt(movie_id),
+          title: title,
+          poster_url: `https://image.tmdb.org/t/p/w500${poster_url}`
+        }
+      )
+    }
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
+}
+
+// removes a movie from the watchlist
+export const removeFromWatchlist = async (movie_id: string) => {
+  try {
+    const result = await db.listDocuments(
+      DATABASE_ID,
+      WATCHLIST_COLLECTION_ID,
+      [Query.equal('movieId', parseInt(movie_id))]
+    );
+
+    // double checks if the movie is actually on the watchlist
+    if (result.documents.length > 0) {
+      await db.deleteDocument(
+        DATABASE_ID,
+        WATCHLIST_COLLECTION_ID,
+        result.documents[0].$id
+      )
+    }
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
+}
+
+// gets the entire watchlist
+export const fetchWatchlist = async (): Promise<WatchlistMovie[] | undefined> => {
+  try {
+    const result = await db.listDocuments(
+      DATABASE_ID,
+      WATCHLIST_COLLECTION_ID,
+      [Query.orderDesc('$createdAt')]
+    );
+
+    // double checks if the movie is actually on the watchlist
+    if (result.documents.length > 0) {
+      return result.documents as unknown as WatchlistMovie[];
+    }
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
+}
+
+// checks if a specific movie is on the watchlist
+export const checkIfMovieOnWatchlist = async (movie_id: string): Promise<boolean> => {
+  try {
+    const result = await db.listDocuments(
+      DATABASE_ID,
+      WATCHLIST_COLLECTION_ID,
+      [Query.equal('movieId', parseInt(movie_id))]
+    );
+
+    // checks if the movie is on the list and returns a boolean value accordingly
+    if (result.documents.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (e) {
+    console.log(e);
+    throw e;
   }
 }

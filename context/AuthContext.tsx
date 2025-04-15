@@ -29,6 +29,8 @@ const AuthProvider = ({ children }: AuthContextProps) => {
     try {
       const activeSession = await getActiveSession();
       setSession(activeSession);
+      const activeSessionUser = await getUser();
+      setUser(activeSessionUser);
     } catch (error) {
       console.log(error);
     } finally {

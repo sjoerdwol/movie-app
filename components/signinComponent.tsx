@@ -40,7 +40,12 @@ export default function SigninComponent() {
           value={password}
           onChangeText={(text: string) => setPassword(text)}
         />
-        <MovieDetailButton onPress={handleOnPress} icon={icons.person} rotateIcon={false} text='Sign In' />
+        <MovieDetailButton
+          onPress={handleOnPress}
+          icon={icons.person}
+          rotateIcon={false}
+          text='Sign In'
+        />
       </View>
     </View>
   )

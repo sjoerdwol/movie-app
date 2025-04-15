@@ -14,16 +14,19 @@ import { icons } from "@/constants/icons";
 import MovieInfo from '@/components/movieInfo';
 import MovieDetailButton from '@/components/movieDetailButton';
 
+import { useAuth } from '@/context/AuthContext';
+
 export default function MovieDetails() {
   const { id } = useLocalSearchParams();
   const { data: movie } = useFetch(() => fetchMovieDetails(id as string));
-  const { data: isSaved, fetchData: refetchIsSaved } = useFetch(() => checkIfMovieOnWatchlist(id as string));
+  const { session, user } = useAuth();
+  const { data: isSaved, fetchData: refetchIsSaved } = useFetch(() => checkIfMovieOnWatchlist(user, id as string));
 
   const toggleSave = async () => {
     if (isSaved) {
-      await removeFromWatchlist(id as string);
+      await removeFromWatchlist(user!, id as string);
     } else {
-      await addToWatchlist(id as string, movie?.title as string, movie?.poster_path as string);
+      await addToWatchlist(user!, id as string, movie?.title as string, movie?.poster_path as string);
     }
     await refetchIsSaved();
   }
@@ -67,12 +70,14 @@ export default function MovieDetails() {
             rotateIcon={true}
             text='Go back'
           />
-          <MovieDetailButton
-            onPress={() => { toggleSave() }}
-            icon={icons.save}
-            rotateIcon={false}
-            text={isSaved ? 'Remove' : 'Save'}
-          />
+          {session && user &&
+            <MovieDetailButton
+              onPress={() => { toggleSave() }}
+              icon={icons.save}
+              rotateIcon={false}
+              text={isSaved ? 'Remove' : 'Save'}
+            />
+          }
         </View>
       </ScrollView>
     </View>

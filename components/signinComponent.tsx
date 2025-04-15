@@ -29,14 +29,14 @@ export default function SigninComponent() {
         <TextInput
           className="w-[75%] border-2 border-accent rounded-lg text-center text-white mb-5"
           placeholder="Enter your email .."
-          placeholderTextColor='white'
+          placeholderTextColor='#a8b5db'
           value={email}
           onChangeText={(text: string) => setEmail(text)}
         />
         <TextInput
           className="w-[75%] border-2 border-accent rounded-lg text-center text-white"
           placeholder="Enter your password .."
-          placeholderTextColor='white'
+          placeholderTextColor='#a8b5db'
           value={password}
           onChangeText={(text: string) => setPassword(text)}
         />

@@ -1,12 +1,12 @@
 // react + react native
-import { useCallback, useRef } from 'react';
+import { useCallback } from 'react';
 import { ActivityIndicator, FlatList, Image, ScrollView, Text, View } from 'react-native';
 
 // expo
 import { useFocusEffect } from 'expo-router';
 
 // service calls
-import { fetchWatchlist } from '@/services/appwrite';
+import { fetchWatchlistForUser } from '@/services/appwrite';
 import useFetch from '@/services/useFetch';
 
 //custom components, images etc.
@@ -18,19 +18,12 @@ import WatchlistMovieCard from '@/components/watchlistMovieCard';
 import { useAuth } from '@/context/AuthContext';
 
 export default function SavedPage() {
-  const { data: watchlist, loading: watchlistLoading, error: watchlistError, fetchData: refetchWatchlist } = useFetch(fetchWatchlist);
-  const { session } = useAuth();
-
-  const firstTimeRef = useRef(true);
+  const { session, user } = useAuth();
+  const { data: watchlist, loading: watchlistLoading, error: watchlistError, fetchData: refetchWatchlist } = useFetch(() => fetchWatchlistForUser(user), false);
 
   useFocusEffect(
     useCallback(() => {
       if (session) {
-        if (firstTimeRef.current) {
-          firstTimeRef.current = false;
-          return;
-        }
-
         refetchWatchlist();
       }
     }, [])

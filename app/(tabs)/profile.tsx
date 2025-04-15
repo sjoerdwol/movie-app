@@ -8,13 +8,27 @@ import MovieDetailButton from '@/components/movieDetailButton';
 import SigninComponent from '@/components/signinComponent';
 
 import { useAuth } from '@/context/AuthContext';
+import { useCallback } from 'react';
+import { useFocusEffect } from 'expo-router';
+
+import useFetch from '@/services/useFetch';
+import { fetchWatchlistForUser } from '@/services/appwrite';
 
 export default function ProfilePage() {
   const { session, user, signout } = useAuth();
+  const { data: watchlist, fetchData: refetchWatchlist } = useFetch(() => fetchWatchlistForUser(user), false);
+
+  useFocusEffect(
+    useCallback(() => {
+      if (session) {
+        refetchWatchlist();
+      }
+    }, [])
+  );
 
   return (
     <>
-      {session ? (
+      {session && user ? (
         <View className="flex-1 bg-primary">
           <Image
             source={images.bg}
@@ -26,11 +40,11 @@ export default function ProfilePage() {
           />
           <View className='px-5'>
             <View className='items-center'>
-              <Text className="text-2xl text-white font-bold mt-10">{user?.name}</Text>
+              <Text className="text-2xl text-white font-bold mt-10">{user.name}</Text>
             </View>
             <View className=''>
               <Text className='text-xl text-white font-bold mt-8'>Favorite Movie</Text>
-              <Text className='text-lg text-gray-400 font-bold mt-8'>Watchlisted movies: 8</Text>
+              {watchlist && <Text className='text-lg text-gray-400 font-bold mt-8'>Watchlisted movies: {watchlist.length}</Text>}
             </View>
             <View className='items-center'>
               <MovieDetailButton icon={icons.person} onPress={signout} rotateIcon={false} text='Sign out' />

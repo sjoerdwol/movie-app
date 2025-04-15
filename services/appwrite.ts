@@ -71,21 +71,18 @@ export const getTrendingMovies = async (): Promise<TrendingMovie[] | undefined> 
 }
 
 // adds a movie to the watchlist
-export const addToWatchlist = async (movie_id: string, title: string, poster_url: string) => {
+export const addToWatchlist = async (user: Models.User<Models.Preferences>, movie_id: string, title: string, poster_url: string) => {
   try {
-    const result = await db.listDocuments(
-      DATABASE_ID,
-      WATCHLIST_COLLECTION_ID,
-      [Query.equal('movieId', parseInt(movie_id))]
-    );
+    const alreadyOnWatchlist = await checkIfMovieOnWatchlist(user, movie_id);
 
-    // double checks that the movie is not yet on the wishlist
-    if (result.documents.length == 0) {
+    // double checks that the movie is not yet on the wishlist of the user
+    if (!alreadyOnWatchlist) {
       await db.createDocument(
         DATABASE_ID,
         WATCHLIST_COLLECTION_ID,
         ID.unique(),
         {
+          userId: user.$id,
           movieId: parseInt(movie_id),
           title: title,
           poster_url: `https://image.tmdb.org/t/p/w500${poster_url}`
@@ -99,15 +96,15 @@ export const addToWatchlist = async (movie_id: string, title: string, poster_url
 }
 
 // removes a movie from the watchlist
-export const removeFromWatchlist = async (movie_id: string) => {
+export const removeFromWatchlist = async (user: Models.User<Models.Preferences>, movie_id: string) => {
   try {
     const result = await db.listDocuments(
       DATABASE_ID,
       WATCHLIST_COLLECTION_ID,
-      [Query.equal('movieId', parseInt(movie_id))]
+      [Query.equal('movieId', parseInt(movie_id)), Query.equal('userId', user.$id)]
     );
 
-    // double checks if the movie is actually on the watchlist
+    // double checks if the movie is actually on the users watchlist
     if (result.documents.length > 0) {
       await db.deleteDocument(
         DATABASE_ID,
@@ -121,43 +118,50 @@ export const removeFromWatchlist = async (movie_id: string) => {
   }
 }
 
-// gets the entire watchlist
-export const fetchWatchlist = async (): Promise<WatchlistMovie[] | undefined> => {
-  try {
-    const result = await db.listDocuments(
-      DATABASE_ID,
-      WATCHLIST_COLLECTION_ID,
-      [Query.orderDesc('$createdAt')]
-    );
+// gets the entire watchlist for a user
+export const fetchWatchlistForUser = async (user: Models.User<Models.Preferences> | null): Promise<WatchlistMovie[] | undefined> => {
+  if (user) {
+    try {
+      const result = await db.listDocuments(
+        DATABASE_ID,
+        WATCHLIST_COLLECTION_ID,
+        [Query.equal('userId', user.$id), Query.orderDesc('$createdAt')]
+      );
 
-    // double checks if the movie is actually on the watchlist
-    if (result.documents.length > 0) {
-      return result.documents as unknown as WatchlistMovie[];
+      // double checks if the user has movies on the watchlist
+      if (result.documents.length > 0) {
+        return result.documents as unknown as WatchlistMovie[];
+      }
+
+    } catch (e) {
+      console.log(e);
+      throw e;
     }
-  } catch (e) {
-    console.log(e);
-    throw e;
   }
 }
 
-// checks if a specific movie is on the watchlist
-export const checkIfMovieOnWatchlist = async (movie_id: string): Promise<boolean> => {
-  try {
-    const result = await db.listDocuments(
-      DATABASE_ID,
-      WATCHLIST_COLLECTION_ID,
-      [Query.equal('movieId', parseInt(movie_id))]
-    );
+// checks if a specific movie is on the watchlist of the user
+export const checkIfMovieOnWatchlist = async (user: Models.User<Models.Preferences> | null, movie_id: string): Promise<boolean | null> => {
+  if (user) {
+    try {
+      const result = await db.listDocuments(
+        DATABASE_ID,
+        WATCHLIST_COLLECTION_ID,
+        [Query.equal('movieId', parseInt(movie_id)), Query.equal('userId', user.$id)]
+      );
 
-    // checks if the movie is on the list and returns a boolean value accordingly
-    if (result.documents.length > 0) {
-      return true;
-    } else {
-      return false;
+      // checks if the movie is on the list and returns a boolean value accordingly
+      if (result.documents.length > 0) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      console.log(e);
+      throw e;
     }
-  } catch (e) {
-    console.log(e);
-    throw e;
+  } else {
+    return null;
   }
 }
 

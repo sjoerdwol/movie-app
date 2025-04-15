@@ -1,4 +1,4 @@
-import { Client, Databases, ID, Query } from 'react-native-appwrite';
+import { Account, Client, Databases, ID, Models, Query } from 'react-native-appwrite';
 
 const COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_ID!;
 const DATABASE_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID!;
@@ -8,6 +8,7 @@ const client = new Client()
   .setEndpoint('https://cloud.appwrite.io/v1')
   .setProject(process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID!);
 
+const account = new Account(client);
 const db = new Databases(client);
 
 // tracks searches made by a user
@@ -154,6 +155,49 @@ export const checkIfMovieOnWatchlist = async (movie_id: string): Promise<boolean
     } else {
       return false;
     }
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
+}
+
+export const signinUser = async (email: string, password: string): Promise<Models.Session> => {
+  try {
+    const responseSession = await account.createEmailPasswordSession(
+      email,
+      password
+    );
+
+    return responseSession;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export const getUser = async () => {
+  try {
+    const activeUser = await account.get();
+    return activeUser;
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
+}
+
+export const signoutUser = async () => {
+  try {
+    await account.deleteSession('current');
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
+}
+
+export const getActiveSession = async () => {
+  try {
+    const activeSession = await account.getSession('current');
+    return activeSession;
   } catch (e) {
     console.log(e);
     throw e;

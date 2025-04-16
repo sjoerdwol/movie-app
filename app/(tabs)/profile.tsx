@@ -12,11 +12,11 @@ import { useCallback } from 'react';
 import { useFocusEffect } from 'expo-router';
 
 import useFetch from '@/services/useFetch';
-import { fetchWatchlistForUser } from '@/services/appwrite';
+import { getUserWatchlist } from '@/services/appwrite_db';
 
 export default function ProfilePage() {
   const { session, user, signout } = useAuth();
-  const { data: watchlist, fetchData: refetchWatchlist } = useFetch(() => fetchWatchlistForUser(user), false);
+  const { data: watchlist, fetchData: refetchWatchlist } = useFetch(() => getUserWatchlist(user), false);
 
   useFocusEffect(
     useCallback(() => {

@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { Text } from "react-native";
-import { getUser, signinUser, signoutUser, getActiveSession } from "@/services/appwrite";
+import { getUser, signinUser, signoutUser, checkActiveSession } from "@/services/appwrite_auth";
 import { Models } from "react-native-appwrite";
 
 const AuthContext = createContext<AuthentificationContext | null>(null);
@@ -27,7 +27,7 @@ const AuthProvider = ({ children }: AuthContextProps) => {
 
   const init = async () => {
     try {
-      const activeSession = await getActiveSession();
+      const activeSession = await checkActiveSession();
       setSession(activeSession);
       const activeSessionUser = await getUser();
       setUser(activeSessionUser);

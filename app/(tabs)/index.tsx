@@ -5,8 +5,8 @@ import { ActivityIndicator, FlatList, Image, ScrollView, Text, View } from "reac
 import { useRouter } from "expo-router";
 
 //service calls
-import { fetchMovies } from "@/services/api";
-import { getTrendingMovies } from "@/services/appwrite";
+import { fetchMovies } from "@/services/tmdb_api";
+import { getTrendingMovies } from "@/services/appwrite_db";
 import useFetch from "@/services/useFetch";
 
 //custom components, images etc.

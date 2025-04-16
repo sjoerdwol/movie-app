@@ -5,8 +5,8 @@ import { Image, ScrollView, Text, View } from 'react-native'
 import { router, useLocalSearchParams } from 'expo-router'
 
 //service calls
-import { addToWatchlist, checkIfMovieOnWatchlist, removeFromWatchlist } from '@/services/appwrite';
-import { fetchMovieDetails } from '@/services/api';
+import { addToWatchlist, checkIfWatchlisted, removeFromWatchlist } from '@/services/appwrite_db';
+import { fetchMovieDetails } from '@/services/tmdb_api';
 import useFetch from "@/services/useFetch";
 
 //custom components, images etc.
@@ -21,7 +21,7 @@ export default function MovieDetails() {
   const { id } = useLocalSearchParams();
   const { data: movie } = useFetch(() => fetchMovieDetails(id as string));
   const { session, user } = useAuth();
-  const { data: isSaved, fetchData: refetchIsSaved } = useFetch(() => checkIfMovieOnWatchlist(user, id as string));
+  const { data: isSaved, fetchData: refetchIsSaved } = useFetch(() => checkIfWatchlisted(user, id as string));
 
   const toggleSave = async () => {
     if (isSaved) {

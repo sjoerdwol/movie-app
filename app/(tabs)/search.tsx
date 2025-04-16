@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, Image, Text, View } from 'react-native';
 
 //service calls
-import { fetchMovies } from "@/services/api";
-import { updateSearchCount } from '@/services/appwrite';
+import { fetchMovies } from "@/services/tmdb_api";
+import { updateSearchCount } from '@/services/appwrite_db';
 import useFetch from "@/services/useFetch";
 
 //custom components, images etc.

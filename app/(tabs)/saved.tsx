@@ -6,7 +6,7 @@ import { ActivityIndicator, FlatList, Image, ScrollView, Text, View } from 'reac
 import { useFocusEffect } from 'expo-router';
 
 // service calls
-import { fetchWatchlistForUser } from '@/services/appwrite';
+import { getUserWatchlist } from '@/services/appwrite_db';
 import useFetch from '@/services/useFetch';
 
 //custom components, images etc.
@@ -19,7 +19,7 @@ import { useAuth } from '@/context/AuthContext';
 
 export default function SavedPage() {
   const { session, user } = useAuth();
-  const { data: watchlist, loading: watchlistLoading, error: watchlistError, fetchData: refetchWatchlist } = useFetch(() => fetchWatchlistForUser(user), false);
+  const { data: watchlist, loading: watchlistLoading, error: watchlistError, fetchData: refetchWatchlist } = useFetch(() => getUserWatchlist(user), false);
 
   useFocusEffect(
     useCallback(() => {

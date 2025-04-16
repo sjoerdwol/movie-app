@@ -5,7 +5,7 @@ import { Image, Text, TouchableOpacity, View } from 'react-native';
 import { Link } from 'expo-router';
 
 //custom icons
-import { icons } from '@/constants/icons';
+import { AntDesign } from '@expo/vector-icons';
 
 export default function MovieCard({ id, poster_path, title, vote_average, release_date }: Movie) {
   return (
@@ -27,11 +27,11 @@ export default function MovieCard({ id, poster_path, title, vote_average, releas
           {title}
         </Text>
         <View className='flex-row items-center justify-start gap-x-1'>
-          <Image
-            source={icons.star}
-            className='size-4'
+          <AntDesign
+            name='star'
+            size={13}
+            color={'gold'}
           />
-
           <Text className='text-white text-sm'>{Math.round(vote_average)}</Text>
         </View>
         <View className='flex-row items-center justify-between'>

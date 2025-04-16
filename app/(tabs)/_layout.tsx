@@ -3,7 +3,6 @@ import { Tabs } from 'expo-router';
 
 //custom components, icons etc.
 import TabIcon from '@/components/tabIcon';
-import { icons } from '@/constants/icons';
 
 export default function TabsLayout() {
   return (
@@ -18,7 +17,7 @@ export default function TabsLayout() {
           alignItems: 'center'
         },
         tabBarStyle: {
-          backgroundColor: '#0F0D23',
+          backgroundColor: '#140f41',
           borderRadius: 50,
           marginHorizontal: 20,
           marginBottom: 100,
@@ -36,8 +35,7 @@ export default function TabsLayout() {
           tabBarIcon: ({ focused }) => (
             <TabIcon
               focused={focused}
-              icon={icons.home}
-              title="Home"
+              icon={focused ? 'home' : 'home-outline'}
             />
           )
         }}
@@ -49,8 +47,7 @@ export default function TabsLayout() {
           tabBarIcon: ({ focused }) => (
             <TabIcon
               focused={focused}
-              icon={icons.search}
-              title="Search"
+              icon={focused ? 'search' : 'search-outline'}
             />
           )
         }}
@@ -62,8 +59,7 @@ export default function TabsLayout() {
           tabBarIcon: ({ focused }) => (
             <TabIcon
               focused={focused}
-              icon={icons.save}
-              title="Watchlist"
+              icon={focused ? 'bookmark' : 'bookmark-outline'}
             />
           )
         }}
@@ -75,8 +71,7 @@ export default function TabsLayout() {
           tabBarIcon: ({ focused }) => (
             <TabIcon
               focused={focused}
-              icon={icons.person}
-              title="Profile"
+              icon={focused ? 'person' : 'person-outline'}
             />
           )
         }}

@@ -7,8 +7,7 @@ type SearchBarProps = {
 
 type TabIconProps = {
   focused: boolean,
-  icon: any,
-  title: string
+  icon: any
 }
 
 type MovieInfoProps = {
@@ -19,7 +18,6 @@ type MovieInfoProps = {
 type MovieDetailButtonProps = {
   onPress: () => void,
   icon: any,
-  rotateIcon: boolean,
   text: string
 }
 

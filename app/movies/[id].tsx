@@ -10,11 +10,12 @@ import { fetchMovieDetails } from '@/services/api';
 import useFetch from "@/services/useFetch";
 
 //custom components, images etc.
-import { icons } from "@/constants/icons";
 import MovieInfo from '@/components/movieInfo';
 import MovieDetailButton from '@/components/movieDetailButton';
 
 import { useAuth } from '@/context/AuthContext';
+
+import { AntDesign } from '@expo/vector-icons';
 
 export default function MovieDetails() {
   const { id } = useLocalSearchParams();
@@ -48,9 +49,10 @@ export default function MovieDetails() {
             <Text className='text-light-200 text-sm'>{movie?.runtime}min</Text>
           </View>
           <View className='flex-row items-center bg-dark-100 px-2 py-1 rounded-md gap-x-1 mt-2'>
-            <Image
-              source={icons.star}
-              className='size-4'
+            <AntDesign
+              name='star'
+              size={13}
+              color={'gold'}
             />
             <Text className='text-white font-bold text-sm'>{Math.round(movie?.vote_average ?? 0)} / 10</Text>
             <Text className='text-light-200 text-sm'>({movie?.vote_count} votes)</Text>
@@ -66,15 +68,13 @@ export default function MovieDetails() {
         <View className='flex flex-row justify-around'>
           <MovieDetailButton
             onPress={router.back}
-            icon={icons.arrow}
-            rotateIcon={true}
+            icon={'arrow-back'}
             text='Go back'
           />
           {session && user &&
             <MovieDetailButton
               onPress={() => { toggleSave() }}
-              icon={icons.save}
-              rotateIcon={false}
+              icon={isSaved ? 'bookmark' : 'bookmark-outline'}
               text={isSaved ? 'Remove' : 'Save'}
             />
           }

@@ -42,8 +42,7 @@ export default function SigninComponent() {
         />
         <MovieDetailButton
           onPress={handleOnPress}
-          icon={icons.person}
-          rotateIcon={false}
+          icon={'login'}
           text='Sign In'
         />
       </View>

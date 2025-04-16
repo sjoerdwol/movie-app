@@ -47,7 +47,7 @@ export default function ProfilePage() {
               {watchlist && <Text className='text-lg text-gray-400 font-bold mt-8'>Watchlisted movies: {watchlist.length}</Text>}
             </View>
             <View className='items-center'>
-              <MovieDetailButton icon={icons.person} onPress={signout} rotateIcon={false} text='Sign out' />
+              <MovieDetailButton icon={'logout'} onPress={signout} text='Sign out' />
             </View>
           </View>
         </View>

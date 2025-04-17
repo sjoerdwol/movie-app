@@ -7,7 +7,7 @@ import { useFocusEffect } from 'expo-router';
 
 // service calls
 import { useAuth } from '@/context/AuthContext';
-import { getUserWatchlist } from '@/services/appwrite_db';
+import { getUserWatchlist, getFavorite } from '@/services/appwrite_db';
 import useFetch from '@/services/useFetch';
 
 //custom components, images etc.
@@ -15,15 +15,24 @@ import { icons } from '@/constants/icons';
 import { images } from '@/constants/images';
 import MovieDetailButton from '@/components/movieDetailButton';
 import SigninComponent from '@/components/signinComponent';
+import WatchlistMovieCard from '@/components/watchlistMovieCard';
 
 export default function ProfilePage() {
   const { session, user, signout } = useAuth();
   const { data: watchlist, fetchData: refetchWatchlist } = useFetch(() => getUserWatchlist(user), false);
+  const { data: favorite, fetchData: refetchFavorite } = useFetch(() => getFavorite(user), false);
 
-  // refetches the watchlist each time the page gets focused IF a session is available
+  const props: WatchlistMovie = {
+    movieId: favorite?.movieId,
+    title: favorite?.title,
+    poster_url: favorite?.poster_url
+  }
+
+  // refetches user data each time the page gets focused IF a session is available
   useFocusEffect(
     useCallback(() => {
       if (session) {
+        refetchFavorite();
         refetchWatchlist();
       }
     }, [])
@@ -46,8 +55,9 @@ export default function ProfilePage() {
               <Text className="text-2xl text-white font-bold mt-10">{user.name}</Text>
             </View>
             <View className=''>
-              <Text className='text-xl text-white font-bold mt-8'>Favorite Movie</Text>
-              {watchlist && <Text className='text-lg text-gray-400 font-bold mt-8'>Watchlisted movies: {watchlist.length}</Text>}
+              <Text className='text-xl text-white font-bold mt-8 mb-5'>Favorite Movie</Text>
+              {favorite && <WatchlistMovieCard {...props} />}
+              {watchlist && <Text className='text-lg text-gray-400 font-bold mt-5'>Watchlisted movies: {watchlist.length}</Text>}
             </View>
             <View className='items-center'>
               <MovieDetailButton icon={'logout'} onPress={signout} text='Sign out' />

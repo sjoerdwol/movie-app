@@ -21,11 +21,11 @@ export default function MovieDetailButton({ onPress, icon, text }: MovieDetailBu
         <Ionicons
           name={icon}
           size={20}
-          className='mr-2 mt-0.5'
+          className='mt-0.5'
           color={'#fff'}
         />
       )}
-      <Text className='text-white font-semibold text-base'>{text}</Text>
+      {icon === 'logout' || icon === 'login' ? (<Text className='text-white font-semibold text-base'>{text}</Text>) : (<></>)}
     </TouchableOpacity>
   )
 }

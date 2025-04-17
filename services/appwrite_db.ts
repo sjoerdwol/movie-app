@@ -5,6 +5,7 @@ const PROJECT_ID = process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID!
 const DATABASE_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID!;
 const METRICS_COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_METRICS_COLLECTION_ID!;
 const WATCHLIST_COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_WATCHLIST_COLLECTION_ID!;
+const FAVORITES_COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_FAVORITES_COLLECTION_ID!;
 
 const client = new Client().setEndpoint('https://cloud.appwrite.io/v1').setProject(PROJECT_ID);
 const db = new Databases(client);
@@ -156,6 +157,102 @@ export const checkIfWatchlisted = async (user: Models.User<Models.Preferences> |
       }
     } catch (error) {
       console.log('Error while checking if watchlisted: ' + error);
+      throw error;
+    }
+  } else {
+    return null;
+  }
+}
+
+// adds the movie as the users favorite
+export const addFavorite = async (user: Models.User<Models.Preferences>, movie_id: string, title: string, poster_url: string) => {
+  try {
+    const result = await db.listDocuments(
+      DATABASE_ID,
+      FAVORITES_COLLECTION_ID,
+      [Query.equal('userId', user.$id)]
+    );
+
+    // checks if the user already has a favorite and if yes removes the old one
+    if (result.documents.length > 0) {
+      await removeFavorite(user, result.documents[0].movieId.toString());
+    }
+
+    await db.createDocument(
+      DATABASE_ID,
+      FAVORITES_COLLECTION_ID,
+      ID.unique(),
+      {
+        userId: user.$id,
+        movieId: parseInt(movie_id),
+        title: title,
+        poster_url: `https://image.tmdb.org/t/p/w500${poster_url}`
+      }
+    );
+  } catch (error) {
+    console.log('Error while adding favorite: ' + error);
+  }
+}
+
+// removes the movie as the users favorite
+export const removeFavorite = async (user: Models.User<Models.Preferences>, movie_id: string) => {
+  try {
+    const result = await db.listDocuments(
+      DATABASE_ID,
+      FAVORITES_COLLECTION_ID,
+      [Query.equal('movieId', parseInt(movie_id)), Query.equal('userId', user.$id)]
+    );
+
+    // double checks if the movie is actually on the users watchlist
+    if (result.documents.length > 0) {
+      await db.deleteDocument(
+        DATABASE_ID,
+        FAVORITES_COLLECTION_ID,
+        result.documents[0].$id
+      );
+    }
+  } catch (error) {
+    console.log('Error while removing user favorite: ' + error);
+  }
+}
+
+// gets the users favorite movie
+export const getFavorite = async (user: Models.User<Models.Preferences>) => {
+  try {
+    const result = await db.listDocuments(
+      DATABASE_ID,
+      FAVORITES_COLLECTION_ID,
+      [Query.equal('userId', user.$id)]
+    );
+
+    // double check if user has favorite
+    if (result.documents.length > 0) {
+      return result.documents[0];
+    }
+
+  } catch (error) {
+    console.log('Error while getting users favorite: ' + error);
+  }
+}
+
+// checks if the movie is the users favorite
+export const checkFavorite = async (user: Models.User<Models.Preferences>, movie_id: string): Promise<boolean | null> => {
+  if (user) {
+    try {
+      const result = await db.listDocuments(
+        DATABASE_ID,
+        FAVORITES_COLLECTION_ID,
+        [Query.equal('movieId', parseInt(movie_id)), Query.equal('userId', user.$id)]
+      );
+
+      // checks if the movie is on the list and returns a boolean value accordingly
+      if (result.documents.length > 0) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      console.log('Error while checking if favorite: ' + error);
       throw error;
     }
   } else {

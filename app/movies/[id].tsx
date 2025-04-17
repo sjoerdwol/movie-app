@@ -5,7 +5,7 @@ import { Image, ScrollView, Text, View } from 'react-native'
 import { router, useLocalSearchParams } from 'expo-router'
 
 //service calls
-import { addToWatchlist, checkIfWatchlisted, removeFromWatchlist } from '@/services/appwrite_db';
+import { addFavorite, addToWatchlist, checkIfWatchlisted, checkFavorite, removeFavorite, removeFromWatchlist } from '@/services/appwrite_db';
 import { useAuth } from '@/context/AuthContext';
 import { fetchMovieDetails } from '@/services/tmdb_api';
 import useFetch from "@/services/useFetch";
@@ -20,15 +20,27 @@ export default function MovieDetails() {
   const { data: movie } = useFetch(() => fetchMovieDetails(id as string));
   const { session, user } = useAuth();
   const { data: isSaved, fetchData: refetchIsSaved } = useFetch(() => checkIfWatchlisted(user, id as string));
+  const { data: isFavorite, fetchData: refetchIsFavorite } = useFetch(() => checkFavorite(user, id as string));
+
 
   // adds or removes the movie from the users watchlist
   const toggleSave = async () => {
     if (isSaved) {
-      await removeFromWatchlist(user!, id as string);
+      await removeFromWatchlist(user, id as string);
     } else {
-      await addToWatchlist(user!, id as string, movie?.title as string, movie?.poster_path as string);
+      await addToWatchlist(user, id as string, movie?.title as string, movie?.poster_path as string);
     }
     await refetchIsSaved();
+  }
+
+  // adds or removes the movie as the users favorite
+  const toggleFavorite = async () => {
+    if (isFavorite) {
+      await removeFavorite(user, id as string);
+    } else {
+      await addFavorite(user, id as string, movie?.title as string, movie?.poster_path as string);
+    }
+    await refetchIsFavorite();
   }
 
   return (
@@ -64,18 +76,26 @@ export default function MovieDetails() {
           </View>
           <MovieInfo label='Production Companies' value={movie?.production_companies.map((c) => c.name).join(' - ') || 'N/A'} />
         </View>
-        <View className='flex flex-row justify-around'>
+        <View className='flex flex-row flex-wrap justify-around'>
           <MovieDetailButton
             onPress={router.back}
             icon={'arrow-back'}
             text='Go back'
           />
           {session && user &&
-            <MovieDetailButton
-              onPress={() => { toggleSave() }}
-              icon={isSaved ? 'bookmark' : 'bookmark-outline'}
-              text={isSaved ? 'Remove' : 'Save'}
-            />
+            <>
+              <MovieDetailButton
+                onPress={() => { toggleSave() }}
+                icon={isSaved ? 'bookmark' : 'bookmark-outline'}
+                text={isSaved ? 'Remove' : 'Save'}
+              />
+
+              <MovieDetailButton
+                onPress={() => { toggleFavorite() }}
+                icon={isFavorite ? 'star' : 'star-outline'}
+                text={isFavorite ? 'Remove Favorite' : 'Add Favorite'}
+              />
+            </>
           }
         </View>
       </ScrollView>

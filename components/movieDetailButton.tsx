@@ -1,6 +1,7 @@
 // react native
 import { Text, TouchableOpacity } from 'react-native';
 
+// icons
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default function MovieDetailButton({ onPress, icon, text }: MovieDetailButtonProps) {

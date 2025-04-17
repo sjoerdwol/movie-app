@@ -17,6 +17,7 @@ export default function SearchPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const { data: movies, loading: moviesLoading, error: moviesError, fetchData, reset } = useFetch(() => fetchMovies({ query: searchQuery }), false);
 
+  // updates the search query state if the user has stopped typing for 1 second
   useEffect(() => {
     const func = setTimeout(async () => {
       if (searchQuery.trim()) {
@@ -29,6 +30,7 @@ export default function SearchPage() {
     return () => clearTimeout(func);
   }, [searchQuery]);
 
+  // updates the search count in Appwrite if the search query has returned atleast one movie
   useEffect(() => {
     if (movies?.length > 0 && movies?.[0]) {
       updateSearchCount(searchQuery, movies[0]);

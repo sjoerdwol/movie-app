@@ -6,16 +6,14 @@ import { router, useLocalSearchParams } from 'expo-router'
 
 //service calls
 import { addToWatchlist, checkIfWatchlisted, removeFromWatchlist } from '@/services/appwrite_db';
+import { useAuth } from '@/context/AuthContext';
 import { fetchMovieDetails } from '@/services/tmdb_api';
 import useFetch from "@/services/useFetch";
 
 //custom components, images etc.
+import { AntDesign } from '@expo/vector-icons';
 import MovieInfo from '@/components/movieInfo';
 import MovieDetailButton from '@/components/movieDetailButton';
-
-import { useAuth } from '@/context/AuthContext';
-
-import { AntDesign } from '@expo/vector-icons';
 
 export default function MovieDetails() {
   const { id } = useLocalSearchParams();
@@ -23,6 +21,7 @@ export default function MovieDetails() {
   const { session, user } = useAuth();
   const { data: isSaved, fetchData: refetchIsSaved } = useFetch(() => checkIfWatchlisted(user, id as string));
 
+  // adds or removes the movie from the users watchlist
   const toggleSave = async () => {
     if (isSaved) {
       await removeFromWatchlist(user!, id as string);

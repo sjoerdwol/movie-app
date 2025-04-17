@@ -1,5 +1,5 @@
 // react + react native
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { ActivityIndicator, FlatList, Image, ScrollView, Text, View } from 'react-native';
 
 // expo
@@ -7,6 +7,7 @@ import { useFocusEffect } from 'expo-router';
 
 // service calls
 import { getUserWatchlist } from '@/services/appwrite_db';
+import { useAuth } from '@/context/AuthContext';
 import useFetch from '@/services/useFetch';
 
 //custom components, images etc.
@@ -15,12 +16,11 @@ import { images } from '@/constants/images';
 import SigninComponent from '@/components/signinComponent';
 import WatchlistMovieCard from '@/components/watchlistMovieCard';
 
-import { useAuth } from '@/context/AuthContext';
-
 export default function SavedPage() {
   const { session, user } = useAuth();
   const { data: watchlist, loading: watchlistLoading, error: watchlistError, fetchData: refetchWatchlist } = useFetch(() => getUserWatchlist(user), false);
 
+  // refetches the watchlist each time the page gets focused IF a session is available
   useFocusEffect(
     useCallback(() => {
       if (session) {

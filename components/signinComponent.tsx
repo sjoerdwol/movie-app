@@ -1,10 +1,14 @@
+// react + react native
+import { useState } from "react";
 import { Image, TextInput, View } from "react-native";
 
+// service calls
+import { useAuth } from "@/context/AuthContext";
+
+// icons and components
 import { images } from "@/constants/images";
 import { icons } from "@/constants/icons";
-import { useAuth } from "@/context/AuthContext";
 import MovieDetailButton from "./movieDetailButton";
-import { useState } from "react";
 
 export default function SigninComponent() {
   const { signin } = useAuth();

@@ -1,5 +1,14 @@
-// react native
+// react + react native
+import { useCallback } from 'react';
 import { View, Text, Image } from 'react-native';
+
+// expo
+import { useFocusEffect } from 'expo-router';
+
+// service calls
+import { useAuth } from '@/context/AuthContext';
+import { getUserWatchlist } from '@/services/appwrite_db';
+import useFetch from '@/services/useFetch';
 
 //custom components, images etc.
 import { icons } from '@/constants/icons';
@@ -7,17 +16,11 @@ import { images } from '@/constants/images';
 import MovieDetailButton from '@/components/movieDetailButton';
 import SigninComponent from '@/components/signinComponent';
 
-import { useAuth } from '@/context/AuthContext';
-import { useCallback } from 'react';
-import { useFocusEffect } from 'expo-router';
-
-import useFetch from '@/services/useFetch';
-import { getUserWatchlist } from '@/services/appwrite_db';
-
 export default function ProfilePage() {
   const { session, user, signout } = useAuth();
   const { data: watchlist, fetchData: refetchWatchlist } = useFetch(() => getUserWatchlist(user), false);
 
+  // refetches the watchlist each time the page gets focused IF a session is available
   useFocusEffect(
     useCallback(() => {
       if (session) {

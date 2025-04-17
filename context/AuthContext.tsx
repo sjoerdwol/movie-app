@@ -1,8 +1,12 @@
+// react + react native
 import { createContext, useContext, useEffect, useState } from "react";
 import { Text } from "react-native";
 import { Models } from "react-native-appwrite";
+
+// service calls
 import { getUser, signinUser, signoutUser, checkActiveSession } from "@/services/appwrite_auth";
 
+// context setup
 const AuthContext = createContext<AuthentificationContext | null>(null);
 
 const AuthProvider = ({ children }: AuthContextProps) => {

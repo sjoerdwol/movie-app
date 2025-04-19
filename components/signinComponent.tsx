@@ -31,14 +31,14 @@ export default function SigninComponent() {
       />
       <View className='items-center px-5 mt-36'>
         <TextInput
-          className="w-[75%] border-2 border-accent rounded-lg text-center text-white mb-5"
+          className="w-[75%] h-14 border-2 border-accent rounded-lg text-center text-white mb-5"
           placeholder="Enter your email .."
           placeholderTextColor='#a8b5db'
           value={email}
           onChangeText={(text: string) => setEmail(text)}
         />
         <TextInput
-          className="w-[75%] border-2 border-accent rounded-lg text-center text-white"
+          className="w-[75%] h-14 border-2 border-accent rounded-lg text-center text-white"
           placeholder="Enter your password .."
           placeholderTextColor='#a8b5db'
           value={password}

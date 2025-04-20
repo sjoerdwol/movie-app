@@ -23,12 +23,14 @@
 <!-- ABOUT THE PROJECT -->
 ## Built With
 
-<img src="https://img.shields.io/badge/React Native-61DAFB?style=for-the-badge&logo=react&logoColor=000" alt="React Native Badge"/>
-<img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=fff" alt="TypeScript Badge"/>
-<img src="https://img.shields.io/badge/Appwrite-FD366E?style=for-the-badge&logo=appwrite&logoColor=fff" alt="TypeScript Badge"/>
+<div>
+  <img src="https://img.shields.io/badge/React Native-61DAFB?style=for-the-badge&logo=react&logoColor=000" alt="React Native Badge"/>
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=fff" alt="TypeScript Badge"/>
+  <img src="https://img.shields.io/badge/Appwrite-FD366E?style=for-the-badge&logo=appwrite&logoColor=fff" alt="TypeScript Badge"/>
+</div>
 
 <!-- DISCLAIMERS -->
 ## Disclaimer
 
-The majority of this app was created during the following course on React Native: [JavaScript Mastery - React Native for Beginners in 2025](https://youtu.be/f8Z9JyB2EIE?si=o74Du2DS1VQF0v5W). <br>
+The majority of this app was created during the following course on React Native: [JavaScript Mastery - React Native for Beginners in 2025](https://youtu.be/f8Z9JyB2EIE?si=o74Du2DS1VQF0v5W).
 The watchlist feature and the authentification with Appwrite was implemented by myself.

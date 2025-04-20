@@ -1,50 +1,34 @@
-# Welcome to your Expo app 👋
+<!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
+<a id="readme-top"></a>
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
 
-## Get started
+<h3 align="center">Movie App</h3>
 
-1. Install dependencies
+  <p align="center">
+      A simple movie app which can be used to browse new movies and add them to a watchlist.
+  </p>
+</div>
 
-   ```bash
-   npm install
-   ```
+<div align="center">
+   <img src="./assets/images/readme_home.jpeg" width="15%">
+   <img src="./assets/images/readme_search.jpeg" width="15%">
+   <img src="./assets/images/readme_watchlist.jpeg" width="15%">
+   <img src="./assets/images/readme_profile.jpeg" width="15%">
+   <img src="./assets/images/readme_signin.jpeg" width="15%">
+</div>
 
-2. Start the app
+<!-- ABOUT THE PROJECT -->
+## Built With
 
-   ```bash
-    npx expo start
-   ```
+<img src="https://img.shields.io/badge/React Native-61DAFB?style=for-the-badge&logo=react&logoColor=000" alt="React Native Badge"/>
+<img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=fff" alt="TypeScript Badge"/>
+<img src="https://img.shields.io/badge/Appwrite-FD366E?style=for-the-badge&logo=appwrite&logoColor=fff" alt="TypeScript Badge"/>
 
-In the output, you'll find options to open the app in a
+<!-- DISCLAIMERS -->
+## Disclaimer
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+The majority of this app was created during the following course on React Native: [JavaScript Mastery - React Native for Beginners in 2025](https://youtu.be/f8Z9JyB2EIE?si=o74Du2DS1VQF0v5W). <br>
+The watchlist feature and the authentification with Appwrite was implemented by myself.
